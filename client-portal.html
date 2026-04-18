@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>生涯咨询 · 来访者预约</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sage: #5a9b7e;
+  --sage-light: #edf6f1;
+  --sage-mid: #7cbfa0;
+  --sage-dark: #3d7a60;
+  --warm: #f5efe6;
+  --warm-deep: #e8d5b7;
+  --terracotta: #c47b52;
+  --terracotta-light: #fdf0e8;
+  --ink: #2c3e35;
+  --stone: #6b7c74;
+  --mist: #f0f5f2;
+  --white: #ffffff;
+  --border: #d8e8e0;
+  --shadow-soft: 0 8px 40px rgba(90,155,126,0.12);
+  --shadow-card: 0 2px 20px rgba(44,62,53,0.08);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Noto Sans SC', sans-serif;
+  background: var(--warm);
+  min-height: 100vh;
+  color: var(--ink);
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ── Organic background blobs ── */
+body::before {
+  content: '';
+  position: fixed;
+  top: -120px; right: -120px;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(90,155,126,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+body::after {
+  content: '';
+  position: fixed;
+  bottom: -100px; left: -80px;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(196,123,82,0.10) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ── Header ── */
+.site-header {
+  background: var(--ink);
+  padding: 0 48px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+.logo {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 16px;
+  color: var(--white);
+  letter-spacing: 3px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--sage-mid);
+  animation: pulse 2.4s infinite;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.6; }
+}
+.header-tag {
+  font-size: 12px;
+  color: #8aab99;
+  letter-spacing: 1px;
+}
+
+/* ── Progress Steps ── */
+.steps-container {
+  background: var(--white);
+  padding: 28px 48px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  position: sticky;
+  top: 60px;
+  z-index: 100;
+  box-shadow: 0 4px 20px rgba(44,62,53,0.06);
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+}
+.step-circle {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  border: 2.5px solid var(--border);
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  color: #b0c4bb;
+  font-weight: 700;
+  transition: all 0.4s ease;
+  position: relative;
+  z-index: 2;
+}
+.step.active .step-circle {
+  border-color: var(--sage);
+  background: var(--sage);
+  color: white;
+  box-shadow: 0 0 0 6px rgba(90,155,126,0.15);
+}
+.step.done .step-circle {
+  border-color: var(--sage);
+  background: var(--sage-light);
+  color: var(--sage);
+}
+.step-label {
+  font-size: 11px;
+  color: #b0c4bb;
+  white-space: nowrap;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  transition: color 0.3s;
+}
+.step.active .step-label { color: var(--sage-dark); }
+.step.done .step-label { color: var(--stone); }
+
+.step-line {
+  width: 60px; height: 2px;
+  background: var(--border);
+  margin-bottom: 18px;
+  flex-shrink: 0;
+  transition: background 0.4s;
+}
+.step-line.done { background: var(--sage-mid); }
+
+/* ── Main Layout ── */
+.main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+}
+
+/* ── Page Header ── */
+.page-head {
+  text-align: center;
+  margin-bottom: 48px;
+  animation: fadeDown 0.6s ease;
+}
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.page-emoji {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 16px;
+  filter: drop-shadow(0 4px 12px rgba(90,155,126,0.3));
+}
+.page-title {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 28px;
+  color: var(--ink);
+  font-weight: 700;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+.page-subtitle {
+  font-size: 15px;
+  color: var(--stone);
+  line-height: 1.7;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* ── Card ── */
+.card {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 36px 40px;
+  box-shadow: var(--shadow-card);
+  margin-bottom: 20px;
+  border: 1px solid rgba(216,232,224,0.6);
+  animation: fadeUp 0.5s ease both;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: var(--sage);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.card-label::before {
+  content: '';
+  display: inline-block;
+  width: 16px; height: 2px;
+  background: var(--sage);
+  border-radius: 1px;
+}
+.card-title {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 18px;
+  color: var(--ink);
+  margin-bottom: 6px;
+  font-weight: 700;
+}
+.card-hint {
+  font-size: 13px;
+  color: var(--stone);
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+/* ── Form Fields ── */
+.field {
+  margin-bottom: 20px;
+}
+.field label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 8px;
+  letter-spacing: 0.3px;
+}
+.field label .req {
+  color: var(--terracotta);
+  margin-left: 2px;
+}
+.field label .opt {
+  font-size: 11px;
+  color: var(--stone);
+  font-weight: 400;
+  margin-left: 4px;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 14px;
+  color: var(--ink);
+  background: var(--mist);
+  outline: none;
+  transition: all 0.25s;
+  appearance: none;
+}
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--sage);
+  background: var(--white);
+  box-shadow: 0 0 0 4px rgba(90,155,126,0.12);
+}
+.field textarea {
+  resize: vertical;
+  min-height: 100px;
+  line-height: 1.6;
+}
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+/* ── Tag Select ── */
+.tag-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 2px;
+}
+.tag-btn {
+  padding: 8px 18px;
+  border: 2px solid var(--border);
+  border-radius: 30px;
+  font-size: 13px;
+  color: var(--stone);
+  cursor: pointer;
+  transition: all 0.2s;
+  background: var(--mist);
+  font-family: 'Noto Sans SC', sans-serif;
+  font-weight: 500;
+  user-select: none;
+}
+.tag-btn:hover { border-color: var(--sage-mid); color: var(--sage-dark); background: var(--sage-light); }
+.tag-btn.selected { border-color: var(--sage); background: var(--sage); color: white; }
+
+/* ── Scale ── */
+.scale-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  margin: 8px 0;
+}
+.scale-btn {
+  flex: 1;
+  height: 40px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  background: var(--mist);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--stone);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+.scale-btn:hover { border-color: var(--sage-mid); color: var(--sage); }
+.scale-btn.selected { background: var(--sage); border-color: var(--sage); color: white; }
+.scale-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--stone);
+  margin-top: 4px;
+}
+
+/* ── Calendar ── */
+.cal-wrap {
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+.cal-header {
+  background: var(--sage);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  font-weight: 600;
+  font-size: 15px;
+  font-family: 'Noto Serif SC', serif;
+}
+.cal-nav {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+  padding: 0 10px;
+  transition: opacity 0.2s;
+  line-height: 1;
+}
+.cal-nav:hover { opacity: 0.65; }
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background: var(--white);
+}
+.cal-day-name {
+  text-align: center;
+  font-size: 11px;
+  color: var(--stone);
+  padding: 10px 0 8px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+.cal-day {
+  text-align: center;
+  padding: 10px 4px;
+  font-size: 13px;
+  cursor: pointer;
+  border-radius: 10px;
+  margin: 3px;
+  transition: all 0.15s;
+  color: var(--ink);
+  font-weight: 500;
+}
+.cal-day:hover:not(.empty):not(.past) { background: var(--sage-light); color: var(--sage-dark); }
+.cal-day.empty { cursor: default; }
+.cal-day.past { color: #ccc; cursor: default; }
+.cal-day.selected { background: var(--sage); color: white; font-weight: 700; box-shadow: 0 2px 8px rgba(90,155,126,0.4); }
+.cal-day.today:not(.selected) { color: var(--terracotta); font-weight: 700; }
+
+/* ── Time Slots ── */
+.time-section {
+  margin-top: 4px;
+}
+.time-section-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.slots-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.slot {
+  padding: 10px 6px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  font-size: 12px;
+  text-align: center;
+  cursor: pointer;
+  background: var(--mist);
+  color: var(--stone);
+  transition: all 0.2s;
+  font-weight: 500;
+  line-height: 1.4;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+.slot:hover { border-color: var(--sage-mid); color: var(--sage-dark); background: var(--sage-light); }
+.slot.selected { background: var(--sage); border-color: var(--sage); color: white; }
+.slot.unavailable { background: #f5f5f5; color: #ccc; cursor: not-allowed; border-color: #eee; }
+
+/* ── Consent ── */
+.consent-box {
+  background: var(--mist);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 24px;
+  font-size: 13px;
+  color: var(--stone);
+  line-height: 1.8;
+  height: 200px;
+  overflow-y: auto;
+  margin-bottom: 16px;
+  scroll-behavior: smooth;
+}
+.consent-box h4 {
+  font-family: 'Noto Serif SC', serif;
+  color: var(--ink);
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+.consent-box p { margin-bottom: 10px; }
+.consent-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  padding: 14px 16px;
+  background: var(--terracotta-light);
+  border: 2px solid var(--warm-deep);
+  border-radius: 12px;
+  transition: all 0.2s;
+}
+.consent-check.agreed {
+  background: var(--sage-light);
+  border-color: var(--sage-mid);
+}
+.consent-check input[type="checkbox"] {
+  width: 20px; height: 20px;
+  margin-top: 1px;
+  accent-color: var(--sage);
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.consent-check-label {
+  font-size: 13px;
+  color: var(--ink);
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+/* ── Nav Buttons ── */
+.nav-row {
+  display: flex;
+  gap: 14px;
+  margin-top: 32px;
+  justify-content: flex-end;
+}
+.btn {
+  padding: 13px 36px;
+  border-radius: 12px;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.25s;
+  letter-spacing: 0.5px;
+}
+.btn-next {
+  background: var(--sage);
+  color: white;
+  box-shadow: 0 6px 20px rgba(90,155,126,0.35);
+}
+.btn-next:hover { background: var(--sage-dark); transform: translateY(-2px); box-shadow: 0 10px 28px rgba(90,155,126,0.4); }
+.btn-next:disabled { background: #c5d8cf; box-shadow: none; cursor: not-allowed; transform: none; }
+.btn-back {
+  background: transparent;
+  color: var(--stone);
+  border: 2px solid var(--border);
+}
+.btn-back:hover { border-color: var(--stone); color: var(--ink); }
+
+/* ── Success ── */
+.success-wrap {
+  text-align: center;
+  padding: 60px 20px;
+  animation: fadeUp 0.7s ease;
+}
+.success-icon {
+  font-size: 72px;
+  display: block;
+  margin-bottom: 24px;
+  animation: bounceIn 0.6s 0.2s both;
+}
+@keyframes bounceIn {
+  0% { transform: scale(0.5); opacity: 0; }
+  70% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.success-title {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 26px;
+  color: var(--ink);
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+.success-sub {
+  font-size: 15px;
+  color: var(--stone);
+  line-height: 1.8;
+  max-width: 400px;
+  margin: 0 auto 32px;
+}
+.summary-card {
+  background: var(--mist);
+  border-radius: 16px;
+  padding: 28px 32px;
+  text-align: left;
+  max-width: 480px;
+  margin: 0 auto 32px;
+  border: 1px solid var(--border);
+}
+.summary-row {
+  display: flex;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+.summary-row:last-child { border-bottom: none; }
+.summary-key { color: var(--stone); width: 80px; flex-shrink: 0; font-weight: 500; }
+.summary-val { color: var(--ink); font-weight: 600; }
+
+/* ── Notice Box ── */
+.notice {
+  background: var(--terracotta-light);
+  border: 1px solid var(--warm-deep);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 13px;
+  color: var(--terracotta);
+  margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  line-height: 1.6;
+}
+
+/* ── Progress Bar ── */
+.progress-mini {
+  background: var(--border);
+  height: 4px;
+  border-radius: 2px;
+  margin-bottom: 28px;
+  overflow: hidden;
+}
+.progress-mini-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--sage), var(--sage-mid));
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .site-header { padding: 0 20px; }
+  .steps-container { padding: 20px 16px; gap: 0; }
+  .step-line { width: 30px; }
+  .step-label { display: none; }
+  .main { padding: 32px 16px 60px; }
+  .card { padding: 24px 20px; }
+  .field-row { grid-template-columns: 1fr; }
+  .slots-grid { grid-template-columns: repeat(3, 1fr); }
+  .page-title { font-size: 22px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="site-header">
+  <div class="logo">
+    <div class="logo-dot"></div>
+    生涯咨询
+  </div>
+  <div class="header-tag">来访者预约通道</div>
+</header>
+
+<!-- Steps -->
+<div class="steps-container">
+  <div class="step active" id="step-1">
+    <div class="step-circle" id="sc-1">1</div>
+    <div class="step-label">基本信息</div>
+  </div>
+  <div class="step-line" id="line-1"></div>
+  <div class="step" id="step-2">
+    <div class="step-circle" id="sc-2">2</div>
+    <div class="step-label">咨询需求</div>
+  </div>
+  <div class="step-line" id="line-2"></div>
+  <div class="step" id="step-3">
+    <div class="step-circle" id="sc-3">3</div>
+    <div class="step-label">预约时间</div>
+  </div>
+  <div class="step-line" id="line-3"></div>
+  <div class="step" id="step-4">
+    <div class="step-circle" id="sc-4">4</div>
+    <div class="step-label">知情同意</div>
+  </div>
+  <div class="step-line" id="line-4"></div>
+  <div class="step" id="step-5">
+    <div class="step-circle" id="sc-5">✓</div>
+    <div class="step-label">确认提交</div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="main" id="main-content">
+
+  <!-- ===== STEP 1: 基本信息 ===== -->
+  <div id="page-1">
+    <div class="page-head">
+      <span class="page-emoji">🌱</span>
+      <div class="page-title">欢迎来到生涯咨询</div>
+      <div class="page-subtitle">在这里，我们将一起探索你的生涯方向。<br>请先填写一些基本信息，帮助咨询师更好地了解你。</div>
+    </div>
+
+    <div class="progress-mini"><div class="progress-mini-fill" style="width:20%"></div></div>
+
+    <div class="card">
+      <div class="card-label">第一步</div>
+      <div class="card-title">你的基本信息</div>
+      <div class="card-hint">以下信息仅供咨询师了解你的基本背景，请放心填写。</div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>姓名 <span class="req">*</span></label>
+          <input type="text" id="f-name" placeholder="你的称呼即可">
+        </div>
+        <div class="field">
+          <label>性别 <span class="req">*</span></label>
+          <select id="f-gender">
+            <option value="">请选择</option>
+            <option>男</option>
+            <option>女</option>
+            <option>其他 / 不便透露</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>年龄 <span class="req">*</span></label>
+          <input type="number" id="f-age" placeholder="岁" min="14" max="70">
+        </div>
+        <div class="field">
+          <label>联系方式 <span class="req">*</span></label>
+          <input type="text" id="f-contact" placeholder="手机 / 微信号">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>当前身份 <span class="req">*</span></label>
+        <div class="tag-group" id="identity-group">
+          <div class="tag-btn" onclick="selectTag(this, 'identity')">高中生</div>
+          <div class="tag-btn" onclick="selectTag(this, 'identity')">大学生（本科）</div>
+          <div class="tag-btn" onclick="selectTag(this, 'identity')">研究生</div>
+          <div class="tag-btn" onclick="selectTag(this, 'identity')">应届毕业生</div>
+          <div class="tag-btn" onclick="selectTag(this, 'identity')">职场在职</div>
+          <div class="tag-btn" onclick="selectTag(this, 'identity')">待业 / 求职中</div>
+          <div class="tag-btn" onclick="selectTag(this, 'identity')">自由职业</div>
+          <div class="tag-btn" onclick="selectTag(this, 'identity')">其他</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>是否有过咨询经历？<span class="opt">（可不填）</span></label>
+        <div class="tag-group" id="experience-group">
+          <div class="tag-btn" onclick="selectTag(this, 'experience')">这是我的第一次</div>
+          <div class="tag-btn" onclick="selectTag(this, 'experience')">有过生涯咨询</div>
+          <div class="tag-btn" onclick="selectTag(this, 'experience')">有过心理咨询</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>你是如何了解到我们的？<span class="opt">（可不填）</span></label>
+        <div class="tag-group" id="source-group">
+          <div class="tag-btn" onclick="selectTag(this, 'source')">朋友推荐</div>
+          <div class="tag-btn" onclick="selectTag(this, 'source')">学校老师推荐</div>
+          <div class="tag-btn" onclick="selectTag(this, 'source')">网络搜索</div>
+          <div class="tag-btn" onclick="selectTag(this, 'source')">社交媒体</div>
+          <div class="tag-btn" onclick="selectTag(this, 'source')">其他</div>
+        </div>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn btn-next" onclick="goTo(2)">下一步 →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== STEP 2: 咨询需求 ===== -->
+  <div id="page-2" style="display:none">
+    <div class="page-head">
+      <span class="page-emoji">🔍</span>
+      <div class="page-title">你现在面临什么？</div>
+      <div class="page-subtitle">请描述你希望在咨询中探索的主题。<br>没有标准答案，说出你真实的困惑就好。</div>
+    </div>
+
+    <div class="progress-mini"><div class="progress-mini-fill" style="width:40%"></div></div>
+
+    <div class="card" style="animation-delay:0.05s">
+      <div class="card-label">第二步 · 一</div>
+      <div class="card-title">你主要想探索的方向</div>
+      <div class="card-hint">可多选，选择最符合你现在状态的选项。</div>
+
+      <div class="tag-group" id="topic-group" style="margin-bottom:0">
+        <div class="tag-btn multi" onclick="toggleTag(this)">不知道自己适合什么职业</div>
+        <div class="tag-btn multi" onclick="toggleTag(this)">对现在的工作 / 专业不满意</div>
+        <div class="tag-btn multi" onclick="toggleTag(this)">想要转行或转专业</div>
+        <div class="tag-btn multi" onclick="toggleTag(this)">求职找工作遇到困难</div>
+        <div class="tag-btn multi" onclick="toggleTag(this)">不知道要不要考研 / 出国</div>
+        <div class="tag-btn multi" onclick="toggleTag(this)">职场人际关系困扰</div>
+        <div class="tag-btn multi" onclick="toggleTag(this)">对未来感到迷茫和焦虑</div>
+        <div class="tag-btn multi" onclick="toggleTag(this)">想了解自己的优势和性格</div>
+        <div class="tag-btn multi" onclick="toggleTag(this)">创业想法 / 副业规划</div>
+        <div class="tag-btn multi" onclick="toggleTag(this)">工作与生活的平衡</div>
+      </div>
+    </div>
+
+    <div class="card" style="animation-delay:0.1s">
+      <div class="card-label">第二步 · 二</div>
+      <div class="card-title">用你自己的话说说</div>
+
+      <div class="field">
+        <label>你现在最大的困惑或期望是什么？<span class="req">*</span></label>
+        <textarea id="f-concern" placeholder="例如：我大学读的是会计，但越来越觉得不喜欢，又不知道自己真正想做什么，很迷茫……" rows="5"></textarea>
+      </div>
+
+      <div class="field">
+        <label>你希望通过咨询达到什么？<span class="opt">（可不填）</span></label>
+        <textarea id="f-goal" placeholder="例如：希望更清楚地了解自己，或者得到一个行动方向……" rows="3"></textarea>
+      </div>
+    </div>
+
+    <div class="card" style="animation-delay:0.15s">
+      <div class="card-label">第二步 · 三</div>
+      <div class="card-title">关于你现在的状态</div>
+
+      <div class="field">
+        <label>目前的情绪困扰程度（1=没有，5=非常强烈）</label>
+        <div class="scale-row" id="scale-emotion">
+          <button class="scale-btn" onclick="selectScale(this, 'emotion', 1)">1</button>
+          <button class="scale-btn" onclick="selectScale(this, 'emotion', 2)">2</button>
+          <button class="scale-btn" onclick="selectScale(this, 'emotion', 3)">3</button>
+          <button class="scale-btn" onclick="selectScale(this, 'emotion', 4)">4</button>
+          <button class="scale-btn" onclick="selectScale(this, 'emotion', 5)">5</button>
+        </div>
+        <div class="scale-labels"><span>平静稳定</span><span>非常焦虑 / 痛苦</span></div>
+      </div>
+
+      <div class="field">
+        <label>你对咨询的期待程度（1=试试看，5=非常迫切）</label>
+        <div class="scale-row" id="scale-expect">
+          <button class="scale-btn" onclick="selectScale(this, 'expect', 1)">1</button>
+          <button class="scale-btn" onclick="selectScale(this, 'expect', 2)">2</button>
+          <button class="scale-btn" onclick="selectScale(this, 'expect', 3)">3</button>
+          <button class="scale-btn" onclick="selectScale(this, 'expect', 4)">4</button>
+          <button class="scale-btn" onclick="selectScale(this, 'expect', 5)">5</button>
+        </div>
+        <div class="scale-labels"><span>随便试试</span><span>非常迫切需要</span></div>
+      </div>
+
+      <div class="field">
+        <label>是否有需要特别告知咨询师的事情？<span class="opt">（可不填）</span></label>
+        <textarea id="f-special" placeholder="例如：时间较紧张、有特殊顾虑、正在接受其他心理咨询等……" rows="3"></textarea>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-back" onclick="goTo(1)">← 返回</button>
+      <button class="btn btn-next" onclick="goTo(3)">下一步 →</button>
+    </div>
+  </div>
+
+  <!-- ===== STEP 3: 预约时间 ===== -->
+  <div id="page-3" style="display:none">
+    <div class="page-head">
+      <span class="page-emoji">📅</span>
+      <div class="page-title">选择你方便的时间</div>
+      <div class="page-subtitle">请选择你希望进行咨询的日期和时间段。<br>首次咨询约 90 分钟，请预留充足时间。</div>
+    </div>
+
+    <div class="progress-mini"><div class="progress-mini-fill" style="width:60%"></div></div>
+
+    <div class="card">
+      <div class="card-label">第三步</div>
+      <div class="card-title">选择咨询日期</div>
+      <div class="card-hint">点击日期后可在下方选择具体时间段。</div>
+
+      <div class="cal-wrap">
+        <div class="cal-header">
+          <button class="cal-nav" onclick="clientShiftMonth(-1)">‹</button>
+          <span id="client-cal-title"></span>
+          <button class="cal-nav" onclick="clientShiftMonth(1)">›</button>
+        </div>
+        <div class="cal-grid" id="client-cal-grid"></div>
+      </div>
+
+      <div id="client-time-section" style="display:none">
+        <div class="time-section">
+          <div class="time-section-label" id="client-time-label">🕐 请选择时间段</div>
+          <div class="slots-grid" id="client-slots"></div>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:20px">
+        <label>咨询方式偏好 <span class="req">*</span></label>
+        <div class="tag-group" id="mode-group">
+          <div class="tag-btn" onclick="selectTag(this, 'mode')">☎️ 电话</div>
+          <div class="tag-btn" onclick="selectTag(this, 'mode')">💬 微信视频</div>
+          <div class="tag-btn" onclick="selectTag(this, 'mode')">📹 腾讯会议</div>
+          <div class="tag-btn" onclick="selectTag(this, 'mode')">🏠 线下面谈</div>
+          <div class="tag-btn" onclick="selectTag(this, 'mode')">均可接受</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>备用时间段 <span class="opt">（可留言，咨询师将与你协调）</span></label>
+        <textarea id="f-backup-time" placeholder="例如：如果以上时间不合适，我周末上午也可以……" rows="2"></textarea>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-back" onclick="goTo(2)">← 返回</button>
+      <button class="btn btn-next" onclick="goTo(4)">下一步 →</button>
+    </div>
+  </div>
+
+  <!-- ===== STEP 4: 知情同意 ===== -->
+  <div id="page-4" style="display:none">
+    <div class="page-head">
+      <span class="page-emoji">📋</span>
+      <div class="page-title">知情同意书</div>
+      <div class="page-subtitle">请仔细阅读以下内容，这是我们建立咨询关系的重要基础。</div>
+    </div>
+
+    <div class="progress-mini"><div class="progress-mini-fill" style="width:80%"></div></div>
+
+    <div class="card">
+      <div class="card-label">第四步</div>
+      <div class="card-title">生涯咨询知情同意书</div>
+      <div class="card-hint">请滚动阅读全部内容后勾选同意。</div>
+
+      <div class="consent-box">
+        <h4>一、生涯咨询的性质与目的</h4>
+        <p>生涯咨询是一种专业的协助服务，旨在帮助来访者探索自我认知、职业兴趣、价值观和能力，明确生涯发展方向，制定可行的行动计划。生涯咨询不同于心理治疗，主要聚焦于职业与生涯发展议题。</p>
+
+        <h4>二、咨询关系与边界</h4>
+        <p>咨询师与来访者之间是专业的工作关系。咨询师将以尊重、非评判的态度对待来访者，双方应保持专业边界，不发展私人关系。</p>
+
+        <h4>三、保密原则</h4>
+        <p>咨询师承诺对你分享的所有信息严格保密。但以下情况除外：（1）来访者有伤害自身或他人的危险；（2）涉及法律强制报告的情形。在保密例外情形下，咨询师将尽可能事先告知来访者。</p>
+
+        <h4>四、咨询录音与记录</h4>
+        <p>咨询过程中可能会做文字记录。如需录音，将提前征得你的书面同意。相关记录仅供咨询使用，不会对外披露。</p>
+
+        <h4>五、咨询费用与取消政策</h4>
+        <p>请在咨询前确认收费标准。如需取消预约，请至少提前 24 小时通知；24 小时内取消可能产生相应费用。</p>
+
+        <h4>六、来访者权利</h4>
+        <p>你有权在任何时候退出咨询，无需说明理由。你也有权就咨询过程提出疑问或反馈。咨询师如发现你的问题超出生涯咨询范畴，有责任向你说明，并协助你寻找更合适的资源。</p>
+
+        <h4>七、紧急情况</h4>
+        <p>生涯咨询不提供危机干预服务。如遇心理健康紧急情况，请拨打心理援助热线：北京 010-82951332 / 全国 400-161-9995。</p>
+      </div>
+
+      <label class="consent-check" id="consent-check-wrap" onclick="toggleConsent()">
+        <input type="checkbox" id="consent-cb">
+        <div class="consent-check-label">
+          我已认真阅读以上《生涯咨询知情同意书》，理解并同意其中所有条款，愿意在此基础上开始咨询关系。
+        </div>
+      </label>
+
+      <div class="notice" style="margin-top:16px">
+        <span>💡</span>
+        <span>如有任何疑问，欢迎在提交后联系咨询师进一步说明。</span>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn btn-back" onclick="goTo(3)">← 返回</button>
+        <button class="btn btn-next" id="submit-btn" onclick="goTo(5)" disabled>确认提交 →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== STEP 5: 成功 ===== -->
+  <div id="page-5" style="display:none">
+    <div class="success-wrap">
+      <span class="success-icon">🎉</span>
+      <div class="success-title">预约申请已提交！</div>
+      <div class="success-sub">感谢你的信任。咨询师将在 24 小时内与你确认时间，<br>请保持手机畅通。</div>
+
+      <div class="summary-card" id="final-summary"></div>
+
+      <div class="notice" style="max-width:480px; margin:0 auto 16px">
+        <span>⏰</span>
+        <span>建议在手机日历中提前标注咨询时间，并在咨询前30分钟找到安静的空间准备。</span>
+      </div>
+
+      <button class="btn btn-next" style="margin:0 auto;display:block" onclick="restart()">再次预约</button>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<script>
+// ─── State ───
+const state = {
+  name:'', gender:'', age:'', contact:'',
+  identity:'', experience:'', source:'',
+  topics:[], concern:'', goal:'', special:'',
+  emotion:0, expect:0,
+  date:'', hour:-1, mode:'', backupTime:'',
+  consented: false
+};
+
+// ─── Step Navigation ───
+let currentStep = 1;
+
+function goTo(step) {
+  if (step > currentStep && !validate(currentStep)) return;
+  document.getElementById('page-' + currentStep).style.display = 'none';
+  document.getElementById('page-' + step).style.display = 'block';
+  currentStep = step;
+  updateStepUI();
+  if (step === 5) buildSummary();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function validate(step) {
+  if (step === 1) {
+    const name = document.getElementById('f-name').value.trim();
+    const gender = document.getElementById('f-gender').value;
+    const age = document.getElementById('f-age').value;
+    const contact = document.getElementById('f-contact').value.trim();
+    if (!name || !gender || !age || !contact || !state.identity) {
+      alert('请填写所有必填项（姓名、性别、年龄、联系方式、当前身份）');
+      return false;
+    }
+  }
+  if (step === 2) {
+    if (!document.getElementById('f-concern').value.trim()) {
+      alert('请描述你的主要困惑或期望');
+      return false;
+    }
+  }
+  if (step === 4) {
+    if (!state.consented) {
+      alert('请先阅读并同意知情同意书');
+      return false;
+    }
+  }
+  return true;
+}
+
+function updateStepUI() {
+  for (let i = 1; i <= 5; i++) {
+    const sc = document.getElementById('sc-' + i);
+    const st = document.getElementById('step-' + i);
+    if (i < currentStep) {
+      st.className = 'step done';
+      sc.textContent = '✓';
+    } else if (i === currentStep) {
+      st.className = 'step active';
+      sc.textContent = i === 5 ? '✓' : i;
+    } else {
+      st.className = 'step';
+      sc.textContent = i === 5 ? '✓' : i;
+    }
+    if (i < 5) {
+      document.getElementById('line-' + i).className = 'step-line' + (i < currentStep ? ' done' : '');
+    }
+  }
+}
+
+// ─── Tag Selection (single) ───
+function selectTag(el, group) {
+  const parent = el.closest('.tag-group');
+  parent.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  state[group] = el.textContent.trim();
+}
+
+// ─── Tag Toggle (multi) ───
+function toggleTag(el) {
+  el.classList.toggle('selected');
+  state.topics = [...document.querySelectorAll('#topic-group .tag-btn.selected')].map(b => b.textContent.trim());
+}
+
+// ─── Scale ───
+const scaleVals = {};
+function selectScale(el, key, val) {
+  scaleVals[key] = val;
+  el.closest('.scale-row').querySelectorAll('.scale-btn').forEach((b,i) => {
+    b.classList.toggle('selected', i+1 === val);
+  });
+}
+
+// ─── Consent ───
+function toggleConsent() {
+  const cb = document.getElementById('consent-cb');
+  state.consented = cb.checked;
+  document.getElementById('consent-check-wrap').classList.toggle('agreed', state.consented);
+  document.getElementById('submit-btn').disabled = !state.consented;
+}
+
+// ─── Calendar ───
+const HOURS = Array.from({length:12}, (_,i) => i+9);
+let cYear, cMonth, cSelectedDate;
+
+function initClientCal() {
+  const now = new Date();
+  cYear = now.getFullYear();
+  cMonth = now.getMonth();
+  renderClientCal();
+}
+
+function clientShiftMonth(dir) {
+  cMonth += dir;
+  if (cMonth > 11) { cMonth = 0; cYear++; }
+  if (cMonth < 0) { cMonth = 11; cYear--; }
+  renderClientCal();
+}
+
+function renderClientCal() {
+  const mn = ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
+  document.getElementById('client-cal-title').textContent = cYear + ' 年 ' + mn[cMonth];
+  const grid = document.getElementById('client-cal-grid');
+  grid.innerHTML = '';
+  ['日','一','二','三','四','五','六'].forEach(d => {
+    const el = document.createElement('div');
+    el.className = 'cal-day-name'; el.textContent = d;
+    grid.appendChild(el);
+  });
+  const firstDay = new Date(cYear, cMonth, 1).getDay();
+  const daysInMonth = new Date(cYear, cMonth + 1, 0).getDate();
+  const today = new Date(); today.setHours(0,0,0,0);
+  const todayKey = fmtDate(today.getFullYear(), today.getMonth(), today.getDate());
+
+  for (let i = 0; i < firstDay; i++) {
+    const el = document.createElement('div'); el.className = 'cal-day empty'; grid.appendChild(el);
+  }
+  for (let d = 1; d <= daysInMonth; d++) {
+    const el = document.createElement('div'); el.className = 'cal-day';
+    el.textContent = d;
+    const key = fmtDate(cYear, cMonth, d);
+    const dt = new Date(cYear, cMonth, d);
+    if (dt < today) el.classList.add('past');
+    if (key === todayKey) el.classList.add('today');
+    if (key === cSelectedDate) el.classList.add('selected');
+    if (!el.classList.contains('past')) el.onclick = () => clientSelectDate(cYear, cMonth, d);
+    grid.appendChild(el);
+  }
+}
+
+function fmtDate(y, m, d) {
+  return y + '-' + String(m+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+}
+
+function clientSelectDate(y, m, d) {
+  cSelectedDate = fmtDate(y, m, d);
+  state.date = cSelectedDate;
+  state.hour = -1;
+  renderClientCal();
+
+  const sec = document.getElementById('client-time-section');
+  sec.style.display = 'block';
+  document.getElementById('client-time-label').textContent = '🕐 ' + y + '年' + (m+1) + '月' + d + '日 — 选择时间段';
+
+  const slotsEl = document.getElementById('client-slots');
+  slotsEl.innerHTML = '';
+  HOURS.forEach(h => {
+    const btn = document.createElement('div');
+    btn.className = 'slot';
+    btn.innerHTML = '<strong>' + String(h).padStart(2,'0') + ':00</strong><br>' + String(h+1).padStart(2,'0') + ':00';
+    btn.onclick = () => {
+      document.querySelectorAll('#client-slots .slot').forEach(s => s.classList.remove('selected'));
+      btn.classList.add('selected');
+      state.hour = h;
+    };
+    slotsEl.appendChild(btn);
+  });
+}
+
+// ─── Summary ───
+function buildSummary() {
+  state.name = document.getElementById('f-name').value.trim();
+  state.concern = document.getElementById('f-concern').value.trim();
+
+  const rows = [
+    ['姓名', state.name || '—'],
+    ['咨询主题', state.topics.length ? state.topics.slice(0,2).join('、') + (state.topics.length > 2 ? '…' : '') : '—'],
+    ['预约时间', state.date ? state.date + (state.hour >= 0 ? ' ' + String(state.hour).padStart(2,'0') + ':00' : '') : '待确认'],
+    ['咨询方式', state.mode || '待确认'],
+    ['知情同意', state.consented ? '✅ 已同意' : '—'],
+  ];
+  const el = document.getElementById('final-summary');
+  el.innerHTML = rows.map(r =>
+    `<div class="summary-row"><span class="summary-key">${r[0]}</span><span class="summary-val">${r[1]}</span></div>`
+  ).join('');
+}
+
+function restart() {
+  location.reload();
+}
+
+// ─── Init ───
+initClientCal();
+</script>
+</body>
+</html>
