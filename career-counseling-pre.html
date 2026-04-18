@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>生涯咨询 · 咨询前工作流程</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #1aab8a;
+    --teal-light: #e8f8f4;
+    --teal-mid: #4ecba8;
+    --indigo: #5b5fc7;
+    --indigo-light: #eef0ff;
+    --gold: #e6a817;
+    --dark: #1a2332;
+    --mid: #4a5568;
+    --light: #f7f9fc;
+    --white: #ffffff;
+    --border: #e2e8f0;
+    --shadow: 0 4px 24px rgba(26,171,138,0.10);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans SC', sans-serif;
+    background: linear-gradient(135deg, #f0faf7 0%, #eef0ff 100%);
+    min-height: 100vh;
+    color: var(--dark);
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--dark);
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+  }
+  header h1 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 18px;
+    color: var(--white);
+    letter-spacing: 2px;
+  }
+  .phase-badge {
+    background: var(--teal);
+    color: white;
+    font-size: 12px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    letter-spacing: 1px;
+    font-weight: 500;
+  }
+
+  /* ── Phase Nav ── */
+  .phase-nav {
+    display: flex;
+    gap: 0;
+    background: var(--white);
+    border-bottom: 2px solid var(--border);
+    padding: 0 40px;
+    overflow-x: auto;
+  }
+  .phase-tab {
+    padding: 16px 28px;
+    font-size: 14px;
+    color: var(--mid);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+    font-weight: 500;
+  }
+  .phase-tab:hover { color: var(--teal); }
+  .phase-tab.active {
+    color: var(--teal);
+    border-bottom-color: var(--teal);
+    font-weight: 700;
+  }
+
+  /* ── Layout ── */
+  .main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 36px 24px 60px;
+  }
+
+  .section-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 22px;
+    color: var(--dark);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--teal);
+    display: inline-block;
+  }
+  .section-desc {
+    color: var(--mid);
+    font-size: 14px;
+    margin-bottom: 28px;
+    padding-left: 20px;
+  }
+
+  /* ── Checklist Cards ── */
+  .card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+    border: 1.5px solid transparent;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    animation: fadeUp 0.4s ease both;
+  }
+  .card:hover { border-color: var(--teal-mid); box-shadow: 0 8px 32px rgba(26,171,138,0.14); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .card-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .card-icon.teal { background: var(--teal-light); }
+  .card-icon.indigo { background: var(--indigo-light); }
+  .card-icon.gold { background: #fff8e7; }
+
+  .card-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--dark);
+  }
+  .card-sub {
+    font-size: 12px;
+    color: var(--mid);
+    margin-top: 2px;
+  }
+
+  .card-progress {
+    margin-left: auto;
+    text-align: right;
+  }
+  .prog-bar-wrap {
+    width: 100px;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 4px;
+  }
+  .prog-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--teal), var(--teal-mid));
+    border-radius: 3px;
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+  .prog-text {
+    font-size: 12px;
+    color: var(--mid);
+  }
+
+  /* ── Checklist Items ── */
+  .checklist { list-style: none; }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.15s;
+    border-radius: 8px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist li:hover { background: var(--teal-light); }
+  .checklist li.done .item-text { color: #a0aec0; text-decoration: line-through; }
+
+  .checkbox {
+    width: 22px; height: 22px;
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    margin-top: 1px;
+  }
+  .done .checkbox {
+    background: var(--teal);
+    border-color: var(--teal);
+    color: white;
+    font-size: 13px;
+  }
+
+  .item-body { flex: 1; }
+  .item-text {
+    font-size: 14px;
+    color: var(--dark);
+    line-height: 1.5;
+    font-weight: 500;
+  }
+  .item-hint {
+    font-size: 12px;
+    color: #718096;
+    margin-top: 3px;
+    line-height: 1.4;
+  }
+
+  .item-tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 500;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .tag-must { background: #fff0f0; color: #e53e3e; }
+  .tag-opt { background: #f0f4ff; color: var(--indigo); }
+  .tag-doc { background: #fff8e7; color: var(--gold); }
+
+  /* ── Notes ── */
+  .notes-area {
+    margin-top: 20px;
+  }
+  .notes-label {
+    font-size: 13px;
+    color: var(--mid);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  textarea {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 13px;
+    color: var(--dark);
+    resize: vertical;
+    min-height: 80px;
+    outline: none;
+    transition: border-color 0.2s;
+    background: var(--light);
+  }
+  textarea:focus { border-color: var(--teal); background: var(--white); }
+
+  /* ── Info Row ── */
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .info-field label {
+    display: block;
+    font-size: 12px;
+    color: var(--mid);
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+  .info-field input, .info-field select {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 13px;
+    color: var(--dark);
+    outline: none;
+    background: var(--light);
+    transition: border-color 0.2s;
+  }
+  .info-field input:focus, .info-field select:focus {
+    border-color: var(--teal);
+    background: var(--white);
+  }
+
+  /* ── Action Buttons ── */
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    padding: 11px 28px;
+    border-radius: 10px;
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+  .btn-primary {
+    background: var(--teal);
+    color: white;
+    box-shadow: 0 4px 14px rgba(26,171,138,0.35);
+  }
+  .btn-primary:hover { background: #159c7a; transform: translateY(-1px); }
+  .btn-secondary {
+    background: var(--white);
+    color: var(--mid);
+    border: 1.5px solid var(--border);
+  }
+  .btn-secondary:hover { border-color: var(--teal); color: var(--teal); }
+
+  /* ── Summary Bar ── */
+  .summary-bar {
+    background: var(--dark);
+    border-radius: 16px;
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+  .sum-item { text-align: center; }
+  .sum-num {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 28px;
+    color: var(--teal-mid);
+    font-weight: 700;
+    line-height: 1;
+  }
+  .sum-label { font-size: 12px; color: #94a3b8; margin-top: 4px; }
+  .sum-divider { width: 1px; height: 40px; background: #334155; }
+
+  /* ── Toast ── */
+  .toast {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    background: var(--dark);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-size: 14px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast .t-icon { color: var(--teal-mid); }
+
+  /* ── Tabs content ── */
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* ── Calendar ── */
+  .cal-wrap {
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .cal-header {
+    background: var(--teal);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    font-weight: 600;
+    font-size: 15px;
+  }
+  .cal-nav {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 22px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 8px;
+    transition: opacity 0.2s;
+  }
+  .cal-nav:hover { opacity: 0.7; }
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background: var(--white);
+  }
+  .cal-day-name {
+    text-align: center;
+    font-size: 12px;
+    color: var(--mid);
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-weight: 500;
+  }
+  .cal-day {
+    text-align: center;
+    padding: 9px 4px;
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 6px;
+    margin: 2px;
+    transition: all 0.15s;
+    color: var(--dark);
+  }
+  .cal-day:hover:not(.empty):not(.past) { background: var(--teal-light); color: var(--teal); }
+  .cal-day.empty { cursor: default; }
+  .cal-day.past { color: #cbd5e0; cursor: default; }
+  .cal-day.selected { background: var(--teal); color: white; font-weight: 700; }
+  .cal-day.has-appt { position: relative; }
+  .cal-day.has-appt::after {
+    content: '';
+    display: block;
+    width: 5px; height: 5px;
+    background: var(--gold);
+    border-radius: 50%;
+    margin: 1px auto 0;
+  }
+  .cal-day.selected.has-appt::after { background: white; }
+
+  /* ── Time Slots ── */
+  .time-slots {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .slot {
+    padding: 7px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--mid);
+    background: var(--light);
+    font-weight: 500;
+  }
+  .slot:hover { border-color: var(--teal); color: var(--teal); background: var(--teal-light); }
+  .slot.booked { background: var(--teal); color: white; border-color: var(--teal); }
+
+  /* ── Appointments List ── */
+  .appointments-list { display: flex; flex-direction: column; gap: 8px; }
+  .appt-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 14px;
+    background: var(--teal-light);
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--dark);
+    border: 1px solid #b2e8d8;
+  }
+  .appt-item .appt-time { font-weight: 600; color: var(--teal); }
+  .appt-del {
+    margin-left: auto;
+    cursor: pointer;
+    color: #a0aec0;
+    font-size: 16px;
+    line-height: 1;
+    transition: color 0.15s;
+  }
+  .appt-del:hover { color: #e53e3e; }
+
+  /* ── Responsive ── */
+  @media (max-width: 600px) {
+    header { padding: 0 16px; }
+    .main { padding: 24px 12px 48px; }
+    .phase-nav { padding: 0 12px; }
+    .card { padding: 20px 18px; }
+    .summary-bar { gap: 16px; padding: 16px 20px; }
+    .sum-divider { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🌱 生涯咨询工作台</h1>
+  <span class="phase-badge">咨询前阶段</span>
+</header>
+
+<nav class="phase-nav">
+  <div class="phase-tab active" onclick="switchTab('reception')">📋 初访接待</div>
+  <div class="phase-tab" onclick="switchTab('prep')">🗂 咨询前准备</div>
+</nav>
+
+<div class="main">
+
+  <!-- Summary Bar -->
+  <div class="summary-bar">
+    <div class="sum-item">
+      <div class="sum-num" id="total-done">0</div>
+      <div class="sum-label">已完成项目</div>
+    </div>
+    <div class="sum-divider"></div>
+    <div class="sum-item">
+      <div class="sum-num" id="total-all">0</div>
+      <div class="sum-label">总项目数</div>
+    </div>
+    <div class="sum-divider"></div>
+    <div class="sum-item">
+      <div class="sum-num" id="total-pct">0%</div>
+      <div class="sum-label">整体完成度</div>
+    </div>
+    <div class="sum-divider"></div>
+    <div class="sum-item">
+      <div class="sum-num" id="client-name-display">—</div>
+      <div class="sum-label">当前来访者</div>
+    </div>
+  </div>
+
+  <!-- ── TAB 1: 初访接待 ── -->
+  <div id="tab-reception" class="tab-content active">
+
+    <div class="section-title"><span class="dot"></span>初访接待</div>
+    <p class="section-desc">首次联系来访者，完成基本信息收集与预约确认</p>
+
+    <!-- 来访者基本信息 -->
+    <div class="card" style="animation-delay:0.05s">
+      <div class="card-header">
+        <div class="card-icon teal">👤</div>
+        <div>
+          <div class="card-title">来访者基本信息</div>
+          <div class="card-sub">记录来访者联系方式与背景</div>
+        </div>
+      </div>
+      <div class="info-grid">
+        <div class="info-field">
+          <label>姓名</label>
+          <input type="text" id="client-name" placeholder="请输入姓名" oninput="updateClientName(this.value)">
+        </div>
+        <div class="info-field">
+          <label>联系电话</label>
+          <input type="text" placeholder="手机号码">
+        </div>
+        <div class="info-field">
+          <label>年龄</label>
+          <input type="text" placeholder="岁">
+        </div>
+        <div class="info-field">
+          <label>职业/学历</label>
+          <input type="text" placeholder="如：大学生 / 职场人">
+        </div>
+        <div class="info-field">
+          <label>咨询来源</label>
+          <select>
+            <option>请选择</option>
+            <option>朋友推荐</option>
+            <option>网络搜索</option>
+            <option>学校推荐</option>
+            <option>机构合作</option>
+            <option>其他</option>
+          </select>
+        </div>
+        <div class="info-field">
+          <label>初步咨询主题</label>
+          <select>
+            <option>请选择</option>
+            <option>职业方向迷茫</option>
+            <option>求职困惑</option>
+            <option>职业转型</option>
+            <option>升学规划</option>
+            <option>职场人际</option>
+            <option>其他</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- 可咨询时间 -->
+    <div class="card" style="animation-delay:0.08s">
+      <div class="card-header">
+        <div class="card-icon teal">🗓</div>
+        <div>
+          <div class="card-title">预约可咨询时间</div>
+          <div class="card-sub">选择年月日及具体时间段，支持多时段预约</div>
+        </div>
+      </div>
+
+      <!-- Date selectors -->
+      <div class="info-grid" style="margin-bottom:20px">
+        <div class="info-field">
+          <label>年</label>
+          <select id="sel-year" onchange="renderCalendar()"></select>
+        </div>
+        <div class="info-field">
+          <label>月</label>
+          <select id="sel-month" onchange="renderCalendar()"></select>
+        </div>
+      </div>
+
+      <!-- Mini Calendar -->
+      <div class="cal-wrap">
+        <div class="cal-header">
+          <button class="cal-nav" onclick="shiftMonth(-1)">‹</button>
+          <span id="cal-title"></span>
+          <button class="cal-nav" onclick="shiftMonth(1)">›</button>
+        </div>
+        <div class="cal-grid" id="cal-grid"></div>
+      </div>
+
+      <!-- Time slots -->
+      <div id="time-slot-section" style="display:none; margin-top:20px">
+        <div class="notes-label" id="time-slot-label">请选择时间段</div>
+        <div class="time-slots" id="time-slots"></div>
+        <div id="booked-list" style="margin-top:14px"></div>
+      </div>
+
+      <!-- Selected appointments summary -->
+      <div id="appointments-summary" style="margin-top:20px; display:none">
+        <div class="notes-label">📅 已预约时间</div>
+        <div id="appointments-list" class="appointments-list"></div>
+      </div>
+    </div>
+
+    <!-- 初访接待清单 -->
+    <div class="card" style="animation-delay:0.1s">
+      <div class="card-header">
+        <div class="card-icon teal">✅</div>
+        <div>
+          <div class="card-title">初访接待核查清单</div>
+          <div class="card-sub">完成所有必填项后方可进入咨询前准备</div>
+        </div>
+        <div class="card-progress">
+          <div class="prog-text" id="reception-prog-text">0 / 0</div>
+          <div class="prog-bar-wrap"><div class="prog-bar" id="reception-prog-bar"></div></div>
+        </div>
+      </div>
+      <ul class="checklist" id="list-reception">
+        <li onclick="toggle(this)" data-group="reception">
+          <div class="checkbox">✓</div>
+          <div class="item-body">
+            <div class="item-text">电话/线上初步沟通</div>
+            <div class="item-hint">了解来访者诉求，确认是否适合生涯咨询，简单说明咨询流程</div>
+          </div>
+          <span class="item-tag tag-must">必须</span>
+        </li>
+        <li onclick="toggle(this)" data-group="reception">
+          <div class="checkbox">✓</div>
+          <div class="item-body">
+            <div class="item-text">评估是否属于生涯咨询范畴</div>
+            <div class="item-hint">区分生涯困惑与心理问题，必要时转介</div>
+          </div>
+          <span class="item-tag tag-must">必须</span>
+        </li>
+        <li onclick="toggle(this)" data-group="reception">
+          <div class="checkbox">✓</div>
+          <div class="item-body">
+            <div class="item-text">确认咨询时间与地点</div>
+            <div class="item-hint">线上/线下，预约具体时间段（建议首次90分钟）</div>
+          </div>
+          <span class="item-tag tag-must">必须</span>
+        </li>
+        <li onclick="toggle(this)" data-group="reception">
+          <div class="checkbox">✓</div>
+          <div class="item-body">
+            <div class="item-text">发送知情同意书</div>
+            <div class="item-hint">包含咨询性质、保密原则、费用说明等</div>
+          </div>
+          <span class="item-tag tag-doc">文件</span>
+        </li>
+        <li onclick="toggle(this)" data-group="reception">
+          <div class="checkbox">✓</div>
+          <div class="item-body">
+            <div class="item-text">收到签署的知情同意书</div>
+            <div class="item-hint">确认来访者已阅读并签字返回</div>
+          </div>
+          <span class="item-tag tag-doc">文件</span>
+        </li>
+        <li onclick="toggle(this)" data-group="reception">
+          <div class="checkbox">✓</div>
+          <div class="item-body">
+            <div class="item-text">发送初访问卷/自我介绍表</div>
+            <div class="item-hint">请来访者提前填写基本背景、成长经历、主要困惑</div>
+          </div>
+          <span class="item-tag tag-doc">文件</span>
+        </li>
+        <li onclick="toggle(this)" data-group="reception">
+          <div class="checkbox">✓</div>
+          <div class="item-body">
+            <div class="item-text">收到已填写的初访问卷</div>
+            <div class="item-hint">确认来访者已完成问卷，存档备查</div>
+          </div>
+          <span class="item-tag tag-must">必须</span>
+        </li>
+        <li onclick="toggle(this)" data-group="reception">
+          <div class="checkbox">✓</div>
+          <div class="item-body">
+            <div class="item-text">确认收费及付款方式</div>
+            <div class="item-hint">告知收费标准，确认付款时间节点</div>
+          </div>
+          <span class="item-tag tag-opt">可选</span>
+        </li>
+        <li onclick="toggle(this)" data-group="reception">
+          <div class="checkbox">✓</div>
+          <div class="item-body">
+            <div class="item-text">咨询前24小时发送提醒</div>
+            <div class="item-hint">短信/微信提醒来访者咨询时间，告知需要准备的事项</div>
+          </div>
+          <span class="item-tag tag-opt">可选</span>
+        </li>
+      </ul>
+      <div class="notes-area">
+        <div class="notes-label">📝 初访备注</div>
+        <textarea placeholder="记录与来访者沟通的重要信息、特殊情况等..."></textarea>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="switchTab('prep')">进入咨询前准备 →</button>
+      <button class="btn btn-secondary" onclick="clearGroup('reception')">重置此页</button>
+    </div>
+  </div>
+
+  <!-- ── TAB 2: 咨询前准备 ── -->
+  <div id="tab-prep" class="tab-content">
+
+    <div class="section-title"><span class="dot"></span>咨询前准备</div>
+    <p class="section-desc">咨询开始前，咨询师需完成以下自我准备与资料整理</p>
+
+    <!-- 资料阅读 -->
+    <div class="card" style="animation-delay:0.05s">
+      <div class="card-header">
+        <div class="card-icon indigo">📖</div>
+        <div>
+          <div class="card-title">来访者资料研读</div>
+          <div class="card-sub">充分了解来访者背景，形成初步印象</div>
+        </div>
+        <div class="card-progress">
+          <div class="prog-text" id="prep1-prog-text">0 / 0</div>
+          <div class="prog-bar-wrap"><div class="prog-bar" id="prep1-prog-bar"></div></div>
+        </div>
+      </div>
+      <ul class="checklist" id="list-prep1">
+        <li onclick="toggle(this)" data-group="prep">
+          <div class="checkbox">✓</div>
+          <div class="item-body">
+            <div class="item-text">仔细阅读初访问卷</div>
+            <div class="item-hint">重点关注来访者描述的核心困惑、关键事件、情绪状态</div>
+          </div>
+          <span class="item-tag tag-must">必须</span>
+        </li>
+        <li onclick="toggle(this)" data-group="prep">
+          <div class="checkbox">✓</div>
+          <div class="item-body">
+            <div class="item-text">整理来访者基本信息摘要</div>
+            <div class="item-hint">年龄、学历、职业阶段、家庭背景、主要诉求</div>
+          </div>
+          <span class="item-tag tag-must">必须</span>
+        </li>
+        <li onclick="toggle(this)" data-group="prep">
+          <div class="checkbox">✓</div>
+          <div class="item-body">
+            <div class="item-text">形成初步假设与关注点</div>
+            <div class="item-hint">基于现有信息初步判断可能的生涯议题（保持开放，勿过早定论）</div>
+          </div>
+          <span class="item-tag tag-must">必须</span>
+        </li>
+        <li onclick="toggle(this)" data-group="prep">
+          <div class="checkbox">✓</div>
+          <div class="item-body">
+            <div class="item-text">列出需要澄清的问题</div>
+            <div class="item-hint">记录资料中不清晰或矛盾之处，咨询时重点探索</div>
+          </div>
+          <span class="item-tag tag-must">必须</span>
+        </li>
+      </ul>
+      <div class="notes-area">
+        <div class="notes-label">💡 初步假设记录</div>
+        <textarea placeholder="记录对来访者的初步印象、可能的核心议题、需要验证的假设..."></textarea>
+      </div>
+    </div>
+
+    <!-- 工具与量表准备 -->
+    <div class="card" style="animation-delay:0.1s">
+      <div class="card-header">
+        <div class="card-icon gold">🔧</div>
+        <div>
+          <div class="card-title">工具与量表准备</div>
+          <div class="card-sub">根据来访者情况选择合适的评估工具</div>
+        </div>
+        <div class="card-progress">
+          <div class="prog-text" id="prep2-prog-text">0 / 0</div>
+          <div class="prog-bar-wrap"><div class="prog-bar" id="prep2-prog-bar"></div></div>
+        </div>
+      </div>
+      <ul class="checklist" id="list-prep2">
+        <li onclick="toggle(this)" data-group="prep">
+          <div class="checkbox">✓</div>
+          <div class="item-body">
+            <div class="item-text">确定是否使用生涯测评（如MBTI/霍兰德/DISC）</div>
+            <div class="item-hint">根据诉求判断是否适合在首次或后续使用量表辅助</div>
+          </div>
+          <span class="item-tag tag-opt">可选</span>
+        </li>
+        <li onclick="toggle(this)" data-group="prep">
+          <div class="checkbox">✓</div>
+          <div class="item-body">
+            <div class="item-text">准备价值观卡片/生涯彩虹等工具</div>
+            <div class="item-hint">如需使用，提前打印或准备电子版</div>
+          </div>
+          <span class="item-tag tag-opt">可选</span>
+        </li>
+        <li onclick="toggle(this)" data-group="prep">
+          <div class="checkbox">✓</div>
+          <div class="item-body">
+            <div class="item-text">准备咨询记录表/会谈记录纸</div>
+            <div class="item-hint">纸质或电子版，确保咨询中可随时记录</div>
+          </div>
+          <span class="item-tag tag-must">必须</span>
+        </li>
+        <li onclick="toggle(this)" data-group="prep">
+          <div class="checkbox">✓</div>
+          <div class="item-body">
+            <div class="item-text">检查录音/录像设备（如有）</div>
+            <div class="item-hint">确认设备正常，已获得来访者授权</div>
+          </div>
+          <span class="item-tag tag-opt">可选</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 环境与自我准备 -->
+    <div class="card" style="animation-delay:0.15s">
+      <div class="card-header">
+        <div class="card-icon teal">🧘</div>
+        <div>
+          <div class="card-title">环境与自我状态准备</div>
+          <div class="card-sub">为咨询创造良好的物理和心理条件</div>
+        </div>
+        <div class="card-progress">
+          <div class="prog-text" id="prep3-prog-text">0 / 0</div>
+          <div class="prog-bar-wrap"><div class="prog-bar" id="prep3-prog-bar"></div></div>
+        </div>
+      </div>
+      <ul class="checklist" id="list-prep3">
+        <li onclick="toggle(this)" data-group="prep">
+          <div class="checkbox">✓</div>
+          <div class="item-body">
+            <div class="item-text">整理咨询空间（私密、安静、舒适）</div>
+            <div class="item-hint">线下：确保无打扰；线上：背景整洁、网络稳定</div>
+          </div>
+          <span class="item-tag tag-must">必须</span>
+        </li>
+        <li onclick="toggle(this)" data-group="prep">
+          <div class="checkbox">✓</div>
+          <div class="item-body">
+            <div class="item-text">关闭手机/通知提醒</div>
+            <div class="item-hint">确保咨询过程不被打断</div>
+          </div>
+          <span class="item-tag tag-must">必须</span>
+        </li>
+        <li onclick="toggle(this)" data-group="prep">
+          <div class="checkbox">✓</div>
+          <div class="item-body">
+            <div class="item-text">做好自我状态调整</div>
+            <div class="item-hint">清空前一次咨询的情绪影响，进行简短正念/呼吸调整</div>
+          </div>
+          <span class="item-tag tag-must">必须</span>
+        </li>
+        <li onclick="toggle(this)" data-group="prep">
+          <div class="checkbox">✓</div>
+          <div class="item-body">
+            <div class="item-text">回顾生涯咨询相关理论或案例</div>
+            <div class="item-hint">如涉及特殊议题（跨行业转型/应届生/中年危机等）可提前热身</div>
+          </div>
+          <span class="item-tag tag-opt">可选</span>
+        </li>
+        <li onclick="toggle(this)" data-group="prep">
+          <div class="checkbox">✓</div>
+          <div class="item-body">
+            <div class="item-text">确认督导/同伴支持安排（如有需要）</div>
+            <div class="item-hint">复杂案例提前与督导沟通，获得支持</div>
+          </div>
+          <span class="item-tag tag-opt">可选</span>
+        </li>
+      </ul>
+      <div class="notes-area">
+        <div class="notes-label">✏️ 咨询前准备备注</div>
+        <textarea placeholder="记录准备过程中的想法、待确认事项、对本次咨询的预期..."></textarea>
+      </div>
+    </div>
+
+    <!-- 咨询目标预设 -->
+    <div class="card" style="animation-delay:0.2s">
+      <div class="card-header">
+        <div class="card-icon indigo">🎯</div>
+        <div>
+          <div class="card-title">首次咨询目标预设</div>
+          <div class="card-sub">明确本次咨询的方向（灵活调整）</div>
+        </div>
+      </div>
+      <div class="info-grid" style="margin-top:0">
+        <div class="info-field" style="grid-column: 1 / -1">
+          <label>预计咨询聚焦方向</label>
+          <input type="text" placeholder="如：探索来访者真实诉求，评估职业价值观，厘清现状困惑...">
+        </div>
+        <div class="info-field">
+          <label>计划咨询时长</label>
+          <select>
+            <option>60 分钟</option>
+            <option selected>90 分钟</option>
+            <option>120 分钟</option>
+          </select>
+        </div>
+        <div class="info-field">
+          <label>咨询阶段</label>
+          <select>
+            <option selected>首次咨询</option>
+            <option>第2次</option>
+            <option>第3次及以上</option>
+          </select>
+        </div>
+      </div>
+      <div class="notes-area" style="margin-top:0">
+        <div class="notes-label">📌 本次咨询开场白草稿</div>
+        <textarea rows="3" placeholder="如：您好，很高兴见到您。在开始之前，我想先用几分钟和您确认一下我们今天咨询的方向..."></textarea>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="startConsult()">✅ 准备完毕，开始咨询</button>
+      <button class="btn btn-secondary" onclick="switchTab('reception')">← 返回初访接待</button>
+      <button class="btn btn-secondary" onclick="clearGroup('prep')">重置此页</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <span class="t-icon">✓</span>
+  <span id="toast-msg">已保存</span>
+</div>
+
+<script>
+  const groups = {
+    reception: [],
+    prep: []
+  };
+
+  function toggle(li) {
+    li.classList.toggle('done');
+    updateAll();
+  }
+
+  function updateAll() {
+    updateGroup('reception', 'reception-prog-bar', 'reception-prog-text');
+    updateGroup('prep', 'prep1-prog-bar', 'prep1-prog-text', 'list-prep1');
+    updateGroup('prep', 'prep2-prog-bar', 'prep2-prog-text', 'list-prep2');
+    updateGroup('prep', 'prep3-prog-bar', 'prep3-prog-text', 'list-prep3');
+    updateSummary();
+  }
+
+  function getItems(listId) {
+    if (listId) return document.querySelectorAll('#' + listId + ' li');
+    return [];
+  }
+
+  function updateGroup(group, barId, textId, listId) {
+    let items;
+    if (listId) {
+      items = document.querySelectorAll('#' + listId + ' li');
+    } else {
+      items = document.querySelectorAll('[data-group="' + group + '"]');
+    }
+    let total = items.length;
+    let done = [...items].filter(i => i.classList.contains('done')).length;
+    let pct = total ? Math.round(done / total * 100) : 0;
+    const bar = document.getElementById(barId);
+    const txt = document.getElementById(textId);
+    if (bar) bar.style.width = pct + '%';
+    if (txt) txt.textContent = done + ' / ' + total;
+  }
+
+  function updateSummary() {
+    const allItems = document.querySelectorAll('.checklist li');
+    const allDone = [...allItems].filter(i => i.classList.contains('done'));
+    document.getElementById('total-all').textContent = allItems.length;
+    document.getElementById('total-done').textContent = allDone.length;
+    const pct = allItems.length ? Math.round(allDone.length / allItems.length * 100) : 0;
+    document.getElementById('total-pct').textContent = pct + '%';
+  }
+
+  function updateClientName(v) {
+    document.getElementById('client-name-display').textContent = v || '—';
+  }
+
+  function switchTab(tab) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.phase-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    const tabs = { reception: 0, prep: 1 };
+    document.querySelectorAll('.phase-tab')[tabs[tab]].classList.add('active');
+    updateAll();
+  }
+
+  function clearGroup(group) {
+    if (group === 'reception') {
+      document.querySelectorAll('[data-group="reception"]').forEach(i => i.classList.remove('done'));
+    } else {
+      document.querySelectorAll('[data-group="prep"]').forEach(i => i.classList.remove('done'));
+    }
+    updateAll();
+    showToast('已重置');
+  }
+
+  function startConsult() {
+    const prepItems = document.querySelectorAll('[data-group="prep"]');
+    const mustDone = [...prepItems].every(i => {
+      const tag = i.querySelector('.item-tag');
+      if (tag && tag.classList.contains('tag-must')) return i.classList.contains('done');
+      return true;
+    });
+    if (!mustDone) {
+      showToast('⚠️ 请先完成所有「必须」项目');
+      return;
+    }
+    showToast('🎉 准备完毕！请开始咨询');
+    setTimeout(() => {
+      alert('✅ 咨询前准备已完成！\n\n您现在可以迎接来访者，进入正式咨询流程。\n\n祝咨询顺利！');
+    }, 500);
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toast-msg').textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+
+  // ── Calendar & Time Slot Logic ──
+  const HOURS = Array.from({length: 12}, (_, i) => i + 9); // 9~20
+  let appointments = [];
+  let currentYear, currentMonth, selectedDate;
+
+  function initCalendar() {
+    const now = new Date();
+    currentYear = now.getFullYear();
+    currentMonth = now.getMonth();
+
+    const yearSel = document.getElementById('sel-year');
+    const monthSel = document.getElementById('sel-month');
+
+    for (let y = now.getFullYear(); y <= now.getFullYear() + 2; y++) {
+      const o = document.createElement('option');
+      o.value = y; o.textContent = y + ' 年';
+      if (y === currentYear) o.selected = true;
+      yearSel.appendChild(o);
+    }
+    for (let m = 0; m < 12; m++) {
+      const o = document.createElement('option');
+      o.value = m; o.textContent = (m + 1) + ' 月';
+      if (m === currentMonth) o.selected = true;
+      monthSel.appendChild(o);
+    }
+    renderCalendar();
+  }
+
+  function shiftMonth(dir) {
+    currentMonth += dir;
+    if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+    if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+    document.getElementById('sel-year').value = currentYear;
+    document.getElementById('sel-month').value = currentMonth;
+    renderCalendar();
+  }
+
+  function renderCalendar() {
+    currentYear = parseInt(document.getElementById('sel-year').value);
+    currentMonth = parseInt(document.getElementById('sel-month').value);
+    const monthNames = ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
+    document.getElementById('cal-title').textContent = currentYear + ' 年 ' + monthNames[currentMonth];
+
+    const grid = document.getElementById('cal-grid');
+    grid.innerHTML = '';
+    const days = ['日','一','二','三','四','五','六'];
+    days.forEach(d => {
+      const el = document.createElement('div');
+      el.className = 'cal-day-name';
+      el.textContent = d;
+      grid.appendChild(el);
+    });
+
+    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    const today = new Date(); today.setHours(0,0,0,0);
+
+    for (let i = 0; i < firstDay; i++) {
+      const el = document.createElement('div');
+      el.className = 'cal-day empty';
+      grid.appendChild(el);
+    }
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const el = document.createElement('div');
+      el.className = 'cal-day';
+      el.textContent = d;
+      const thisDate = new Date(currentYear, currentMonth, d);
+      const dateKey = dateToKey(currentYear, currentMonth, d);
+
+      if (thisDate < today) el.classList.add('past');
+      if (selectedDate === dateKey) el.classList.add('selected');
+      if (appointments.some(a => a.dateKey === dateKey)) el.classList.add('has-appt');
+
+      if (!el.classList.contains('past')) {
+        el.onclick = () => selectDate(currentYear, currentMonth, d);
+      }
+      grid.appendChild(el);
+    }
+  }
+
+  function dateToKey(y, m, d) {
+    return y + '-' + String(m+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+  }
+
+  function selectDate(y, m, d) {
+    selectedDate = dateToKey(y, m, d);
+    renderCalendar();
+
+    const section = document.getElementById('time-slot-section');
+    section.style.display = 'block';
+    const label = document.getElementById('time-slot-label');
+    label.textContent = '🕐 ' + y + '年' + (m+1) + '月' + d + '日  —  选择可咨询时间段';
+
+    const slotsEl = document.getElementById('time-slots');
+    slotsEl.innerHTML = '';
+    HOURS.forEach(h => {
+      const btn = document.createElement('div');
+      btn.className = 'slot';
+      btn.textContent = String(h).padStart(2,'0') + ':00 – ' + String(h+1).padStart(2,'0') + ':00';
+      const isBooked = appointments.some(a => a.dateKey === selectedDate && a.hour === h);
+      if (isBooked) btn.classList.add('booked');
+      btn.onclick = () => toggleSlot(h, btn);
+      slotsEl.appendChild(btn);
+    });
+  }
+
+  function toggleSlot(hour, btn) {
+    const idx = appointments.findIndex(a => a.dateKey === selectedDate && a.hour === hour);
+    if (idx >= 0) {
+      appointments.splice(idx, 1);
+      btn.classList.remove('booked');
+      showToast('已取消该时间段');
+    } else {
+      appointments.push({ dateKey: selectedDate, hour });
+      btn.classList.add('booked');
+      showToast('✅ 已添加时间段');
+    }
+    renderCalendar();
+    renderAppointments();
+  }
+
+  function renderAppointments() {
+    const summary = document.getElementById('appointments-summary');
+    const list = document.getElementById('appointments-list');
+    if (appointments.length === 0) { summary.style.display = 'none'; return; }
+    summary.style.display = 'block';
+
+    const sorted = [...appointments].sort((a, b) => a.dateKey.localeCompare(b.dateKey) || a.hour - b.hour);
+    list.innerHTML = '';
+    sorted.forEach((a, i) => {
+      const el = document.createElement('div');
+      el.className = 'appt-item';
+      el.innerHTML = '<span>📅</span><span class="appt-time">' + a.dateKey + '</span><span>' + String(a.hour).padStart(2,'0') + ':00 – ' + String(a.hour+1).padStart(2,'0') + ':00</span><span class="appt-del" onclick="removeApptByIndex(' + i + ')">✕</span>';
+      list.appendChild(el);
+    });
+  }
+
+  function removeApptByIndex(idx) {
+    const sorted = [...appointments].sort((a, b) => a.dateKey.localeCompare(b.dateKey) || a.hour - b.hour);
+    const target = sorted[idx];
+    appointments = appointments.filter(a => !(a.dateKey === target.dateKey && a.hour === target.hour));
+    renderCalendar();
+    renderAppointments();
+    const parts = (selectedDate || '').split('-');
+    if (parts.length === 3) selectDate(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
+    showToast('已删除预约时间');
+  }
+
+  initCalendar();
+
+
+  // Init
+  updateAll();
+</script>
+</body>
+</html>
